@@ -36,7 +36,6 @@ var Bidier = function() {
 	
 	function translate_nodes_by_selector(selectors, dom_root) {
 	    var dom_root = dom_root || document;
-	    console.log('translate_nodes_by_selector, root is: ', dom_root);
 	    
 	    if (typeof selectors == 'string')
 	       selectors = [selectors];
