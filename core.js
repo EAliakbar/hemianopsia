@@ -35,34 +35,34 @@ var Bidier = function() {
 	}
 	
 	function translate_nodes_by_selector(selectors, dom_root) {
-	    var dom_root = dom_root || document;
-	    
-	    if (typeof selectors == 'string')
-	       selectors = [selectors];
+		var dom_root = dom_root || document;
 
-        selectors.forEach(function(selector) {
-    		var nodes = dom_root.querySelectorAll( selector+':not(.rendered-text)' );
-            for( var i=0, l=nodes.length; i<l; i++ )
-                nodes.item(i).className += text_is_rtl(nodes.item(i).textContent) ? ' rtl-rendered-text' : ' rendered-text';
-        }, this);
+		if (typeof selectors == 'string')
+			selectors = [selectors];
+
+		selectors.forEach(function(selector) {
+				var nodes = dom_root.querySelectorAll( selector+':not(.rendered-text)' );
+				for( var i=0, l=nodes.length; i<l; i++ )
+					nodes.item(i).className += text_is_rtl(nodes.item(i).textContent) ? ' rtl-rendered-text' : ' rendered-text';
+				}, this);
 	}
 	
 	function register_late_translation(selector, root_selector, interval) {
-	   var interval = interval || 3000;
-	   var dom_root = (root_selector) ? document.querySelector(root_selector) : document;
-	   if (dom_root == null) return;
-	   
-	   if (typeof window.MutationObserver != 'undefined') {
-            var observer = new MutationObserver(function(records) {
-            records.forEach(function(record) {
-                if (record.addedNodes != null)
-                    translate_nodes_by_selector(selector, dom_root);
-                });
-            });
-            observer.observe(dom_root, {childList: true, subtree: true});
-        } else {
-            this.timer = window.setInterval(translate_nodes_by_selector, interval, selector, dom_root);
-        }
+		var interval = interval || 3000;
+		var dom_root = (root_selector) ? document.querySelector(root_selector) : document;
+		if (dom_root == null) return;
+
+		if (typeof window.MutationObserver != 'undefined') {
+			var observer = new MutationObserver(function(records) {
+					records.forEach(function(record) {
+						if (record.addedNodes != null)
+							translate_nodes_by_selector(selector, dom_root);
+						});
+			});
+			observer.observe(dom_root, {childList: true, subtree: true});
+		} else {
+			this.timer = window.setInterval(translate_nodes_by_selector, interval, selector, dom_root);
+		}
 	}
 
 	return {

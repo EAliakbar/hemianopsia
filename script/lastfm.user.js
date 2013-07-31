@@ -15,24 +15,23 @@
 	var manifest = [
 		{
 			selector: '#content div.journals div.journalBody div.bbcode',
-			comment: 'for journal'
+			comment: 'journal'
 		}, {
-			selector: 'div.deferred div.shoutboxContainer ul.shouts li.clearit p',
-			root_selector: '#content div.leftCol div.leftColWrapper',
+			selector: 'div.shoutboxContainer ul.shouts li.clearit p',
+			root_selector: 'div#content > div.leftCol > div.leftColWrapper > div.deferred',
 			live: true,
-			comment: 'for shoutbox in user profile'
+			comment: 'shoutbox in user and group profile'
 		}, {
 			selector: '#content div.fullWidth div.skylineRight div.skyWrap div#shoutbox ul#shoutList.shouts li.clearit p',
 			comment: 'paged shoutbox'
 		}, {
-			selector: 'div.deferred div.shoutboxContainer ul.shouts li.clearit p',
-			root_selector: 'body.r-artist div.page-wrapper article.content div.artist-social',
+			selector: 'div.shoutboxContainer ul.shouts li.clearit p',
+			root_selector: 'body.r-artist > div.page-wrapper > article.content > div.artist-social > section > div.deferred',
 			live: true,
 			comment: 'shoutbox in artist page'
 		}
 	];
 
 	prepare_style();
-	console.log('bidier', Bidier);
 	(new Bidier()).run(manifest);
 })();
