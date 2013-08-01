@@ -15,7 +15,7 @@
 	var manifest = [
 		{
 			selector: '#content div.journals div.journalBody div.bbcode',
-			comment: 'journal'
+			comment: 'journal text'
 		}, {
 			selector: 'div.shoutboxContainer ul.shouts li.clearit p',
 			root_selector: 'div#content > div.leftCol > div.leftColWrapper > div.deferred',
@@ -29,6 +29,9 @@
 			root_selector: 'body.r-artist > div.page-wrapper > article.content > div.artist-social > section > div.deferred',
 			live: true,
 			comment: 'shoutbox in artist page'
+		}, {
+			selector: '#content div.journals div#shoutbox ul#shoutList.shouts li.clearit p',
+			comment: 'journal comments'
 		}
 	];
 
