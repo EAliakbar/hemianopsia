@@ -33,16 +33,27 @@ var Bidier = function() {
 	}
 	
 	function translate_nodes_by_selector(selectors, dom_root) {
-		var dom_root = dom_root || document;
-
-		if (typeof selectors == 'string')
-			selectors = [selectors];
-
 		selectors.forEach(function(selector) {
-				var nodes = dom_root.querySelectorAll(selector+':not(.rendered-text)');
-				for(var i=0, l=nodes.length; i<l; i++)
-					nodes.item(i).className += text_is_rtl(nodes.item(i).textContent) ? ' rtl-rendered-text' : ' rendered-text';
-				}, this);
+			var nodes = dom_root.querySelectorAll(selector+':not(.rendered-text)');
+			for(var i=0, l=nodes.length; i<l; i++) {
+				nodes.item(i).className += text_is_rtl(nodes.item(i).textContent) ? ' rtl-rendered-text' : ' rendered-text';
+			}
+		});
+	}
+
+	function translate_nodes_by_input_event(selectors, dom_root) {
+		selectors.forEach(function(selector) {
+			var nodes = dom_root.querySelectorAll(selector);
+			for (var i=0; nodes.length; i++) {
+				nodes.item(i).addEventListener('input', function(e) {
+					if (text_is_rtl(e.target.value)) {
+						e.target.classList.add('rtl-rendered-text');
+					} else if (e.target.classList.contains('rtl-rendered-text')) {
+						e.target.classList.remove('rtl-rendered-text');
+					}
+				}, false);
+			}
+		});
 	}
 
 	function rule_includes_location(re, location) {
@@ -52,34 +63,37 @@ var Bidier = function() {
 		return (i == re_list.length) ? false : true;
 	}
 	
-	function register_late_translation(selector, root_selector, interval) {
+	function register_late_translation(selector, dom_root, translator_func, interval) {
 		var interval = interval || 3000;
-		var dom_root = (root_selector) ? document.querySelector(root_selector) : document;
-		if (dom_root == null) return;
 
 		if (typeof window.MutationObserver != 'undefined') {
 			var observer = new MutationObserver(function(records) {
-					records.forEach(function(record) {
-						if (record.addedNodes != null)
-							translate_nodes_by_selector(selector, dom_root);
-						});
+				records.forEach(function(record) {
+					if (record.addedNodes != null)
+						translator_func(selector, dom_root);
+				});
 			});
 			observer.observe(dom_root, {childList: true, subtree: true});
 		} else {
-			this.timer = window.setInterval(translate_nodes_by_selector, interval, selector, dom_root);
+			// TODO: save timer for clearing
+			window.setInterval(translator_func, interval, selector, dom_root);
 		}
 	}
 
+
 	return {
-		translate_selectors: translate_nodes_by_selector,
-		register_live_selector: register_late_translation,
 		run: function(manifest) {
 			manifest.forEach(function(rule) {
 				if(! rule_includes_location(rule.path_re, window.location)) return;
-				if (rule.hasOwnProperty('live') && rule.live) {
-					this.register_live_selector(rule.selector, rule.root_selector, rule.interval);
+				var dom_root = (rule.root_selector) ? document.querySelector(rule.root_selector) : document;
+				if (dom_root == null) return;
+				var translator_func = (rule.input) ? translate_nodes_by_input_event : translate_nodes_by_selector;
+				var selectors = (typeof rule.selector == 'string') ? [rule.selector] : rule.selector;
+
+				if (rule.live) {
+					register_late_translation(selectors, dom_root, translator_func, rule.interval);
 				} else {
-					this.translate_selectors(rule.selector);
+					translator_func(selectors, dom_root);
 				}
 			}, this);
 		}
