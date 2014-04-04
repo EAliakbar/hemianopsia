@@ -2,6 +2,7 @@
 // @name        Goodreads.com bidi
 // @namespace   https://github.com/reith/hemianopsia
 // @description This script rearranges right-to-left written texts
+// @include     http://www.goodreads.com/*
 // @include     https://www.goodreads.com/*
 // @require     https://raw.github.com/reith/hemianopsia/master/core.js
 // @downloadURL https://raw.github.com/reith/hemianopsia/master/script/goodreads.user.js
