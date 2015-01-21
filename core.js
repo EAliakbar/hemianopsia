@@ -34,7 +34,7 @@ var Bidier = function() {
 	
 	function translate_nodes_by_selector(selectors, dom_root) {
 		selectors.forEach(function(selector) {
-			var nodes = dom_root.querySelectorAll(selector+':not(.rendered-text)');
+			var nodes = dom_root.querySelectorAll(selector+':not(.rendered-text):not(.rtl-rendered-text)');
 			for(var i=0, l=nodes.length; i<l; i++) {
 				nodes.item(i).className += text_is_rtl(nodes.item(i).textContent) ? ' rtl-rendered-text' : ' rendered-text';
 			}
