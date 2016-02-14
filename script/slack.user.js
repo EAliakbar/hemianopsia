@@ -6,7 +6,7 @@
 // @require     https://raw.github.com/reith/hemianopsia/master/core.js
 // @downloadURL https://raw.github.com/reith/hemianopsia/master/script/slack.user.js
 // @grant       none
-// @version     1.0
+// @version     1.1
 // @run-at      document-end
 // ==/UserScript==
 
@@ -17,7 +17,7 @@
 			root_selector: '#msgs_div',
 			live: true,
 			selector: [
-				'span.message_content',
+				'span.message_body',
 				'div.comment'
 			],
 			comment: 'messages and their comments'
