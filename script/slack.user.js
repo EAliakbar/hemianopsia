@@ -6,7 +6,7 @@
 // @require     https://raw.github.com/reith/hemianopsia/master/core.js
 // @downloadURL https://raw.github.com/reith/hemianopsia/master/script/slack.user.js
 // @grant       none
-// @version     1.2
+// @version     1.3
 // @run-at      document-end
 // ==/UserScript==
 
@@ -29,7 +29,16 @@
 				'span.c-message__body',
 			],
 			comment: 'New messages'
+		},
+		{
+			root_selector: '#file_preview_comments_section',
+			live: true,
+			selector: [
+				'div.comment_body',
+			],
+			comment: 'Threads sidebar'
 		}
+
 	];
 
 	prepare_style();
